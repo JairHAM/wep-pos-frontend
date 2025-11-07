@@ -12,6 +12,8 @@ function WaiterView() {
   const [orders, setOrders] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
+  console.log('WaiterView renderizado', { user, view });
+
   // Mesas del 1 al 20
   const tables = Array.from({ length: 20 }, (_, i) => i + 1);
 
@@ -22,10 +24,13 @@ function WaiterView() {
 
   const loadProducts = async () => {
     try {
+      console.log('Cargando productos...');
       const data = await productsAPI.getAll();
+      console.log('Productos cargados:', data);
       setProducts(Array.isArray(data) ? data.filter(p => p.isActive) : []);
     } catch (error) {
       console.error('Error al cargar productos:', error);
+      alert('Error al cargar productos: ' + error.message);
     }
   };
 
