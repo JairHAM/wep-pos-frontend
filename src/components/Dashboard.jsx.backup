@@ -182,9 +182,6 @@ function Dashboard() {
 
       {/* Main Content */}
       <main className="dashboard-content">
-        {currentRole === "WAITER" ? (
-          <WaiterView />
-        ) : (
         {activeTab === 'sales' && (
           <div className="content-section">
             <h2>🛒 Nueva Venta</h2>
@@ -247,8 +244,6 @@ function Dashboard() {
               <p className="hint">Aquí podrás configurar usuarios y preferencias del sistema.</p>
             </div>
           </div>
-        )}
-          </>
         )}
       </main>
     </div>
