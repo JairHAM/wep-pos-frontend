@@ -47,7 +47,7 @@ function Dashboard() {
           </div>
         </div>
         <div className="header-right">
-          {user?.role === 'MANAGER' && (
+          {(user?.role === 'MANAGER' || user?.role === 'ADMIN') && (
             <div className="role-switcher">
               <label>Ver como:</label>
               <select 
@@ -57,7 +57,7 @@ function Dashboard() {
                   setActiveTab('sales');
                 }}
               >
-                <option value="MANAGER">Gerente</option>
+                <option value={user?.role}>{user?.role === 'ADMIN' ? 'Administrador' : 'Gerente'}</option>
                 <option value="CASHIER">Cajero</option>
                 <option value="WAITER">Mesero</option>
                 <option value="COOK">Cocinero</option>
