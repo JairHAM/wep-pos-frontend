@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useAuthStore from '../store/authStore';
 import Products from './Products';
 import Categories from './Categories';
+import WaiterView from './WaiterView';
 import './Dashboard.css';
 
 function Dashboard() {
