@@ -98,20 +98,23 @@ function WaiterView() {
           productId: item.productId,
           quantity: item.quantity,
           price: item.price
-        })),
-        subtotal: subtotal,
-        total: subtotal
+        }))
+        // No enviamos subtotal, total ni paymentMethod - el backend los calcula
       };
 
-      await ordersAPI.create(orderData);
+      console.log('Enviando orden:', orderData);
+      const response = await ordersAPI.create(orderData);
+      console.log('Respuesta del servidor:', response);
+      
       alert(`✅ Pedido enviado a cocina para Mesa ${selectedTable}`);
       setCart([]);
       setView('tables');
       setSelectedTable(null);
       loadOrders();
     } catch (error) {
-      console.error('Error al enviar pedido:', error);
-      alert('Error al enviar pedido: ' + (error.response?.data?.error || error.message));
+      console.error('Error completo:', error);
+      console.error('Error response:', error.response?.data);
+      alert('Error al enviar pedido: ' + (error.response?.data?.error || error.response?.data?.details || error.message));
     }
   };
 
