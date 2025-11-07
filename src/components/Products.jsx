@@ -29,19 +29,20 @@ function Products() {
   const loadProducts = async () => {
     try {
       const data = await productsAPI.getAll();
-      setProducts(data);
+      setProducts(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error al cargar productos:', error);
-      alert('Error al cargar productos');
+      setProducts([]);
     }
   };
 
   const loadCategories = async () => {
     try {
       const data = await categoriesAPI.getAll();
-      setCategories(data);
+      setCategories(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error al cargar categorías:', error);
+      setCategories([]);
     }
   };
 

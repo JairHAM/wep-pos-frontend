@@ -24,10 +24,10 @@ function Categories() {
   const loadCategories = async () => {
     try {
       const data = await categoriesAPI.getAll();
-      setCategories(data);
+      setCategories(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error al cargar categorías:', error);
-      alert('Error al cargar categorías');
+      setCategories([]);
     }
   };
 

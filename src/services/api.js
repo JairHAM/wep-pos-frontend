@@ -65,12 +65,12 @@ export const authAPI = {
 export const categoriesAPI = {
   getAll: async () => {
     const response = await api.get('/categories');
-    return response.data;
+    return response.data.categories || response.data;
   },
 
   create: async (categoryData) => {
     const response = await api.post('/categories', categoryData);
-    return response.data;
+    return response.data.category || response.data;
   },
 };
 
@@ -78,22 +78,22 @@ export const categoriesAPI = {
 export const productsAPI = {
   getAll: async (params = {}) => {
     const response = await api.get('/products', { params });
-    return response.data;
+    return response.data.products || response.data;
   },
 
   getById: async (id) => {
     const response = await api.get(`/products/${id}`);
-    return response.data;
+    return response.data.product || response.data;
   },
 
   create: async (productData) => {
     const response = await api.post('/products', productData);
-    return response.data;
+    return response.data.product || response.data;
   },
 
   update: async (id, productData) => {
     const response = await api.put(`/products/${id}`, productData);
-    return response.data;
+    return response.data.product || response.data;
   },
 
   delete: async (id) => {
