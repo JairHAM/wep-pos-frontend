@@ -3,6 +3,7 @@ import useAuthStore from '../store/authStore';
 import Products from './Products';
 import Categories from './Categories';
 import WaiterView from './WaiterView';
+import CookView from './CookView';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -17,7 +18,7 @@ function Dashboard() {
   };
 
   // Determinar qué rol está viendo actualmente
-  const currentRole = user?.role === 'MANAGER' ? viewAsRole : user?.role;
+  const currentRole = (user?.role === 'MANAGER' || user?.role === 'ADMIN') ? viewAsRole : user?.role;
 
   // Permisos por rol
   const rolePermissions = {
@@ -252,6 +253,9 @@ function Dashboard() {
             )}
           </>
         )}
+
+        {/* Vista de Cocinero */}
+        {currentRole === 'COOK' && <CookView />}
       </main>
     </div>
   );
