@@ -181,73 +181,75 @@ function Dashboard() {
       </nav>
 
       {/* Main Content */}
+      {/* Main Content */}
       <main className="dashboard-content">
-        {currentRole === "WAITER" ? (
+        {currentRole === 'WAITER' ? (
           <WaiterView />
         ) : (
-        {activeTab === 'sales' && (
-          <div className="content-section">
-            <h2>🛒 Nueva Venta</h2>
-            <div className="placeholder-content">
-              <div className="placeholder-icon">🚧</div>
-              <h3>Módulo de Ventas</h3>
-              <p>Esta sección estará disponible próximamente</p>
-              <p className="hint">Aquí podrás realizar ventas, agregar productos al carrito y procesar pagos.</p>
-            </div>
-          </div>
-        )}
+          <>
+            {activeTab === 'sales' && (
+              <div className="content-section">
+                <h2>🛒 Nueva Venta</h2>
+                <div className="placeholder-content">
+                  <div className="placeholder-icon">🚧</div>
+                  <h3>Módulo de Ventas</h3>
+                  <p>Esta sección estará disponible próximamente</p>
+                  <p className="hint">Aquí podrás realizar ventas, agregar productos al carrito y procesar pagos.</p>
+                </div>
+              </div>
+            )}
 
-        {activeTab === 'products' && <Products />}
+            {activeTab === 'products' && <Products />}
 
-        {activeTab === 'categories' && <Categories />}
+            {activeTab === 'categories' && <Categories />}
 
-        {activeTab === 'orders-kitchen' && (
-          <div className="content-section">
-            <h2>�‍🍳 Órdenes de Cocina</h2>
-            <div className="placeholder-content">
-              <div className="placeholder-icon">🍳</div>
-              <h3>Vista de Cocina</h3>
-              <p>Esta sección estará disponible próximamente</p>
-              <p className="hint">Aquí verás las órdenes pendientes para preparar.</p>
-            </div>
-          </div>
-        )}
+            {activeTab === 'orders-kitchen' && (
+              <div className="content-section">
+                <h2>👨‍🍳 Órdenes de Cocina</h2>
+                <div className="placeholder-content">
+                  <div className="placeholder-icon">🍳</div>
+                  <h3>Vista de Cocina</h3>
+                  <p>Esta sección estará disponible próximamente</p>
+                  <p className="hint">Aquí verás las órdenes pendientes para preparar.</p>
+                </div>
+              </div>
+            )}
 
-        {activeTab === 'orders-bar' && (
-          <div className="content-section">
-            <h2>🍹 Órdenes de Bar</h2>
-            <div className="placeholder-content">
-              <div className="placeholder-icon">🍸</div>
-              <h3>Vista de Bar</h3>
-              <p>Esta sección estará disponible próximamente</p>
-              <p className="hint">Aquí verás las órdenes de bebidas pendientes.</p>
-            </div>
-          </div>
-        )}
+            {activeTab === 'orders-bar' && (
+              <div className="content-section">
+                <h2>🍹 Órdenes de Bar</h2>
+                <div className="placeholder-content">
+                  <div className="placeholder-icon">🍸</div>
+                  <h3>Vista de Bar</h3>
+                  <p>Esta sección estará disponible próximamente</p>
+                  <p className="hint">Aquí verás las órdenes de bebidas pendientes.</p>
+                </div>
+              </div>
+            )}
 
-        {activeTab === 'reports' && (
-          <div className="content-section">
-            <h2>📊 Reportes y Estadísticas</h2>
-            <div className="placeholder-content">
-              <div className="placeholder-icon">🚧</div>
-              <h3>Módulo de Reportes</h3>
-              <p>Esta sección estará disponible próximamente</p>
-              <p className="hint">Aquí podrás ver reportes de ventas, productos más vendidos y análisis.</p>
-            </div>
-          </div>
-        )}
+            {activeTab === 'reports' && (
+              <div className="content-section">
+                <h2>📊 Reportes y Estadísticas</h2>
+                <div className="placeholder-content">
+                  <div className="placeholder-icon">🚧</div>
+                  <h3>Módulo de Reportes</h3>
+                  <p>Esta sección estará disponible próximamente</p>
+                  <p className="hint">Aquí podrás ver reportes de ventas, productos más vendidos y análisis.</p>
+                </div>
+              </div>
+            )}
 
-        {activeTab === 'settings' && (
-          <div className="content-section">
-            <h2>⚙️ Configuración del Sistema</h2>
-            <div className="placeholder-content">
-              <div className="placeholder-icon">🚧</div>
-              <h3>Módulo de Configuración</h3>
-              <p>Esta sección estará disponible próximamente</p>
-              <p className="hint">Aquí podrás configurar usuarios y preferencias del sistema.</p>
-            </div>
-          </div>
-        )}
+            {activeTab === 'settings' && (
+              <div className="content-section">
+                <h2>⚙️ Configuración del Sistema</h2>
+                <div className="placeholder-content">
+                  <div className="placeholder-icon">🚧</div>
+                  <h3>Módulo de Configuración</h3>
+                  <p>Esta sección estará disponible próximamente</p>
+                  <p className="hint">Aquí podrás configurar usuarios y preferencias del sistema.</p>
+                </div>
+              </div>
+            )}
           </>
         )}
       </main>
