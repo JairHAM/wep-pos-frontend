@@ -10,15 +10,9 @@ function Products() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [formData, setFormData] = useState({
     name: '',
-    description: '',
-    price: '',
-    cost: '',
     categoryId: '',
-    stock: 0,
-    minStock: 5,
-    sku: '',
-    barcode: '',
-    imageUrl: ''
+    price: '',
+    isActive: true
   });
 
   useEffect(() => {
@@ -50,26 +44,28 @@ function Products() {
     e.preventDefault();
     try {
       const productData = {
-        ...formData,
+        name: formData.name,
+        categoryId: formData.categoryId,
         price: parseFloat(formData.price),
-        cost: formData.cost ? parseFloat(formData.cost) : null,
-        stock: parseInt(formData.stock),
-        minStock: parseInt(formData.minStock)
+        isActive: formData.isActive,
+        stock: 100, // Stock por defecto
+        minStock: 5
       };
 
       if (editingProduct) {
         await productsAPI.update(editingProduct.id, productData);
+        alert('Producto actualizado exitosamente');
       } else {
         await productsAPI.create(productData);
+        alert('Producto creado exitosamente');
       }
 
       setShowModal(false);
       resetForm();
       loadProducts();
-      alert(editingProduct ? 'Producto actualizado' : 'Producto creado');
     } catch (error) {
       console.error('Error al guardar producto:', error);
-      alert('Error al guardar producto');
+      alert('Error al guardar producto: ' + (error.response?.data?.error || error.message));
     }
   };
 
@@ -77,15 +73,9 @@ function Products() {
     setEditingProduct(product);
     setFormData({
       name: product.name,
-      description: product.description || '',
-      price: product.price,
-      cost: product.cost || '',
       categoryId: product.categoryId,
-      stock: product.stock,
-      minStock: product.minStock,
-      sku: product.sku || '',
-      barcode: product.barcode || '',
-      imageUrl: product.imageUrl || ''
+      price: product.price,
+      isActive: product.isActive
     });
     setShowModal(true);
   };
@@ -106,15 +96,9 @@ function Products() {
   const resetForm = () => {
     setFormData({
       name: '',
-      description: '',
-      price: '',
-      cost: '',
       categoryId: '',
-      stock: 0,
-      minStock: 5,
-      sku: '',
-      barcode: '',
-      imageUrl: ''
+      price: '',
+      isActive: true
     });
     setEditingProduct(null);
   };
@@ -152,36 +136,42 @@ function Products() {
       </div>
 
       <div className="products-grid">
-        {filteredProducts.map(product => (
-          <div key={product.id} className="product-card">
-            {product.imageUrl && (
-              <img src={product.imageUrl} alt={product.name} className="product-image" />
-            )}
-            <div className="product-info">
-              <h3>{product.name}</h3>
-              <p className="product-description">{product.description}</p>
-              <div className="product-details">
-                <span className="product-category">
-                  {categories.find(c => c.id === product.categoryId)?.name}
-                </span>
-                <span className="product-price">${product.price.toFixed(2)}</span>
-              </div>
-              <div className="product-stock">
-                <span className={product.stock < product.minStock ? 'low-stock' : ''}>
-                  Stock: {product.stock}
-                </span>
-              </div>
-              <div className="product-actions">
-                <button onClick={() => handleEdit(product)} className="btn-edit">
-                  Editar
-                </button>
-                <button onClick={() => handleDelete(product.id)} className="btn-delete">
-                  Eliminar
-                </button>
+        {filteredProducts.length === 0 ? (
+          <div className="empty-state">
+            <p>No hay productos registrados</p>
+            <button className="btn-add" onClick={() => { resetForm(); setShowModal(true); }}>
+              Agregar primer producto
+            </button>
+          </div>
+        ) : (
+          filteredProducts.map(product => (
+            <div key={product.id} className="product-card">
+              <div className="product-info">
+                <div className="product-header-row">
+                  <h3>{product.name}</h3>
+                  <span className={`product-status ${product.isActive ? 'active' : 'inactive'}`}>
+                    {product.isActive ? '✓ Disponible' : '✗ No disponible'}
+                  </span>
+                </div>
+                <div className="product-details">
+                  <span className="product-category">
+                    {categories.find(c => c.id === product.categoryId)?.icon} {' '}
+                    {categories.find(c => c.id === product.categoryId)?.name}
+                  </span>
+                  <span className="product-price">${product.price.toFixed(2)}</span>
+                </div>
+                <div className="product-actions">
+                  <button onClick={() => handleEdit(product)} className="btn-edit">
+                    ✏️ Editar
+                  </button>
+                  <button onClick={() => handleDelete(product.id)} className="btn-delete">
+                    🗑️ Eliminar
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {showModal && (
@@ -193,118 +183,54 @@ function Products() {
             </div>
             
             <form onSubmit={handleSubmit} className="product-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Nombre *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="Ej: Pizza Margherita"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Categoría *</label>
-                  <select
-                    required
-                    value={formData.categoryId}
-                    onChange={(e) => setFormData({...formData, categoryId: e.target.value})}
-                  >
-                    <option value="">Seleccionar...</option>
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
               <div className="form-group">
-                <label>Descripción</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="Descripción del producto"
-                  rows="3"
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Precio de Venta *</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    value={formData.price}
-                    onChange={(e) => setFormData({...formData, price: e.target.value})}
-                    placeholder="0.00"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Costo</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={formData.cost}
-                    onChange={(e) => setFormData({...formData, cost: e.target.value})}
-                    placeholder="0.00"
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Stock</label>
-                  <input
-                    type="number"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({...formData, stock: e.target.value})}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Stock Mínimo</label>
-                  <input
-                    type="number"
-                    value={formData.minStock}
-                    onChange={(e) => setFormData({...formData, minStock: e.target.value})}
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>SKU</label>
-                  <input
-                    type="text"
-                    value={formData.sku}
-                    onChange={(e) => setFormData({...formData, sku: e.target.value})}
-                    placeholder="SKU-001"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Código de Barras</label>
-                  <input
-                    type="text"
-                    value={formData.barcode}
-                    onChange={(e) => setFormData({...formData, barcode: e.target.value})}
-                    placeholder="123456789"
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>URL de Imagen</label>
+                <label>Nombre del Plato *</label>
                 <input
-                  type="url"
-                  value={formData.imageUrl}
-                  onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-                  placeholder="https://ejemplo.com/imagen.jpg"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  placeholder="Ej: Pizza Margarita, Café Americano"
                 />
+              </div>
+
+              <div className="form-group">
+                <label>Categoría *</label>
+                <select
+                  required
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData({...formData, categoryId: e.target.value})}
+                >
+                  <option value="">Seleccionar categoría...</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.icon} {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Precio *</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  value={formData.price}
+                  onChange={(e) => setFormData({...formData, price: e.target.value})}
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={formData.isActive}
+                    onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
+                  />
+                  <span>Disponible para venta</span>
+                </label>
               </div>
 
               <div className="form-actions">
